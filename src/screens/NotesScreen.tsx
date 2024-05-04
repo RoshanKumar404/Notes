@@ -1,67 +1,74 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import { Button, TextInput } from 'react-native-paper'
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
 
 export default function NotesScreen() {
   const [isVisible, setIsVisible] = useState(true);
+  const [notes, setNotes] = useState('');
+  const [addons, setAddons] = useState([]);
 
   const toggleTextInput = () => {
     setIsVisible(!isVisible);
+    if (notes.trim() !== '') {
+      setAddons(prevAddons => [...prevAddons, notes]);
+      setNotes('');
+    }
   };
 
-  // const renderTextInput = () => {
-  //   if (isVisible) {
-  //     return (<TextInput placeholder="jai" />)
-  //   }
-  //   return null;
-  // };
   return (
     <View style={styles.background}>
-      <Text style={{ fontSize: 20 }}>NotesScreen</Text>
-      {isVisible && <TextInput placeholder="Plz Add your notes here" />}
-      <View style={styles.container}>
-        <TouchableOpacity onPress={() => console.log("jai sri ram")}>
-          <Text>add one</Text>
+      {isVisible && (
+        <TextInput
+          placeholder="Plz Add your notes here"
+          style={{ marginTop: 10 }}
+          multiline={true}
+          value={notes}
+          onChangeText={text => setNotes(text)}
+        />
+      )}
+      <View style={styles.notesContainer}>
+        {addons.map((note, index) => (
+          <Text key={index} style={styles.note}>
+            {note}
+          </Text>
+        ))}
+      </View>
+      <View style={styles.addButtonContainer}>
+        <TouchableOpacity onPress={toggleTextInput}>
+          <Text style={styles.addButton}>+</Text>
         </TouchableOpacity>
-
-        <View style={styles.buttonContainer}>
-          <Button onPress={toggleTextInput}>
-            <View style={styles.buttonContent}>
-              {/* <Text style={{ fontSize: 18, fontWeight: 'bold', marginRight: 5 }}>addone</Text> */}
-              <Text style={{ fontSize: 60 }}>+</Text>
-            </View>
-          </Button>
-        </View>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: "#45dea0",
+    backgroundColor: 'black',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: "column"
+    flexDirection: 'column',
   },
-  container: {
+  notesContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    marginBottom: 20,
-    marginRight: 20,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginTop: 20,
+    marginLeft: 20,
   },
-  buttonContainer: {
-    position: "absolute",
+  note: {
+    fontSize: 18,
+    color: 'white',
+    marginBottom: 5,
+  },
+  addButtonContainer: {
+    position: 'absolute',
     bottom: 30,
-    right: -150,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
+    right: 20,
   },
-  buttonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  addButton: {
+    fontSize: 70,
+    color: '#00bfff',
   },
-})
+});
