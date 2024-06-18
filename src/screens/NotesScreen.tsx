@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, FlatList } from 'react-native';
-import { Button, Modal, TextInput } from 'react-native-paper';
+import { Button, Modal, TextInput, Portal, Provider } from 'react-native-paper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function NotesScreen() {
   const [isVisible, setIsVisible] = useState(true);
@@ -13,7 +14,7 @@ export default function NotesScreen() {
   const findGreet = () => {
     const hrs = new Date().getHours();
     if (hrs === 0 || hrs < 12) return 'Morning';
-    if (hrs === 1 || hrs < 17) return 'Afternoon';
+    if (hrs === 12 || hrs < 17) return 'Afternoon';
     return 'Evening';
   };
 
@@ -42,41 +43,46 @@ export default function NotesScreen() {
   );
 
   return (
-    <View style={styles.background}>
-      <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#EA7773' }}>Hello Roshan, Good {greet}</Text>
-      <Modal visible={onmodal} onDismiss={() => setOnModal(false)}>
-        <View style={{ backgroundColor: 'white', padding: 20 }}>
-          <TextInput
-            placeholder="Title"
-            style={{ marginTop: 10, paddingHorizontal: 10 }}
-            value={title}
-            onChangeText={text => setTitle(text)}
-            autoFocus={onmodal}
-          />
-          <TextInput
-            placeholder="Please add your notes here"
-            style={{ marginTop: 10, paddingHorizontal: 10 }}
-            multiline={true}
-            value={notes}
-            onChangeText={text => setNotes(text)}
-          />
-          <Button mode="contained" onPress={addNote} style={{ marginTop: 10 }}>
-            Add Note
-          </Button>
-        </View>
-      </Modal>
-      <FlatList
-        data={addons}
-        renderItem={renderItem}
-        keyExtractor={item => item.id.toString()}
-        numColumns={2}
-        contentContainerStyle={{ alignItems: 'flex-start' }}
-        style={styles.notesContainer}
-      />
-      <TouchableOpacity style={styles.addButtonContainer} onPress={toggleTextEntry}>
-        <Text style={styles.addButton}>+</Text>
-      </TouchableOpacity>
-    </View>
+    <Provider>
+      <View style={styles.background}>
+        <Text style={{ fontSize: 28, fontWeight: 'bold', color: '#EA7773' }}>Hello Roshan, Good {greet}</Text>
+        <Portal>
+          <Modal visible={onmodal} onDismiss={() => setOnModal(false)}>
+            <View style={{ backgroundColor: 'white', padding: 20 }}>
+              <TextInput
+                label="Title"
+                style={{ marginTop: 10 }}
+                value={title}
+                onChangeText={text => setTitle(text)}
+                autoFocus={onmodal}
+              />
+              <TextInput
+                label="Please add your notes here"
+                style={{ marginTop: 10 }}
+                multiline={true}
+                value={notes}
+                onChangeText={text => setNotes(text)}
+              />
+              <Button mode="contained" onPress={addNote} style={{ marginTop: 10 }}>
+                Add Note
+              </Button>
+            </View>
+          </Modal>
+        </Portal>
+        <FlatList
+          data={addons}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
+          numColumns={2}
+          contentContainerStyle={{ alignItems: 'flex-start' }}
+          style={styles.notesContainer}
+        />
+        <TouchableOpacity style={styles.addButtonContainer} onPress={toggleTextEntry}>
+        <Text style={{fontSize:70}}>+</Text> 
+         {/* <MaterialCommunityIcons name="plus-circle-outline" size={70} color="#00bfff" /> */}
+        </TouchableOpacity>
+      </View>
+    </Provider>
   );
 }
 
@@ -113,9 +119,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 50,
     right: 40,
-  },
-  addButton: {
-    fontSize: 70,
-    color: '#00bfff',
   },
 });

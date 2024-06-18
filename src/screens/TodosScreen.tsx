@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions } from 'react-native';
-import { IconButton } from 'react-native-paper';
+// import { IconButton } from 'react-native-paper';
 import IImage from '../../component/TheImage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+//import { blue100 } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 interface TodoItem {
   id: string;
@@ -101,8 +103,17 @@ export default function TodosScreen() {
           <Text style={styles.dateTime}>{item.dateTime}</Text>
         </View>
         <View style={styles.iconContainer}>
-          <IconButton icon="brush" iconColor='#fff' onPress={() => editHandler(item)} />
-          <IconButton icon="delete" iconColor='#fff' onPress={() => deletetodo(item.id)} />
+<TouchableOpacity onPress={() => editHandler(item)}>
+  <Text style={{color:"#997450"}}>Edit</Text>
+</TouchableOpacity>
+<TouchableOpacity  onPress={() => deletetodo(item.id)}>
+  <Text style={{color:"#997450"}}>delete</Text>
+</TouchableOpacity>
+        
+          {/* <IconButton icon="brush" iconColor='#fff' onPress={() => editHandler(item)} /> */}
+                        {/* <MaterialCommunityIcons name="television-box"  size={100}onPress={() => editHandler(item)}  />
+                        <MaterialCommunityIcons name="television-box" size={100} onPress={() => deletetodo(item.id)}/> */}
+          {/* <IconButton icon="delete" iconColor='#fff' onPress={() => deletetodo(item.id)} /> */}
         </View>
       </View>
     );
@@ -116,7 +127,7 @@ export default function TodosScreen() {
   }
 
   return (
-    <View>
+    <View style={{backgroundColor:"#4b737b"}}>
       <TextInput
         editable
         multiline
@@ -163,20 +174,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   Renderaitem: {
-    backgroundColor: "black",
+    backgroundColor: "#f1f1f1",
     borderRadius: 9,
     margin: 7,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    color: "#FFF",
+    color: "black",
+   
   },
   todoContainer: {
     flex: 1,
     flexDirection: "column",
   },
   title: {
-    color: "#E1DA00",
+    color: "#997450",
     marginHorizontal: 10,
     fontSize: 18,
   },
@@ -187,9 +199,14 @@ const styles = StyleSheet.create({
     
   },
   iconContainer: {
+    
+    flex:2,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent:"space-evenly"
   },
 
 
 });
+
+//ye hai mera code
